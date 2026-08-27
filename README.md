@@ -56,32 +56,67 @@ npm run dev
 
 Windows 用户也可双击根目录 `start.bat` 一键启动。
 
-### 可选配置
+### 环境变量（`backend/.env`）
 
-复制 `backend/.env.example` 为 `backend/.env`，按需填写：
+复制 `backend/.env.example` 为 `backend/.env`：
 
 ```env
 SECRET_KEY=随机字符串
-XIAOHONGSHU_COOKIE=   # 部分小红书链接需要
+XIAOHONGSHU_COOKIE=a1=xxx; webId=xxx; web_session=xxx
 DOUBAO_COOKIE=
 ```
 
-## ☁️ 免费部署
+> **小红书 Cookie 格式**：选 **Header String**（请求头字符串），不是 JSON、不是 Netscape。  
+> 从浏览器 F12 → 网络 → 请求头里复制 `Cookie:` 后面的整段，原样粘贴，一行即可。
 
-本项目需**前后端分离部署**（GitHub Pages 只能托管静态页，无法跑解析后端）。
+## ☁️ 免费部署（网站上线）
 
-| 组件 | 推荐平台 | 说明 |
-|------|----------|------|
-| 后端 API | [Render](https://render.com) Free | 跑 Flask 解析服务 |
-| 前端站点 | [Cloudflare Pages](https://pages.cloudflare.com) / Vercel | 静态页面 |
-
-前端生产环境需设置环境变量：
+架构：**Render 跑后端 + Cloudflare Pages 跑前端**
 
 ```text
-VITE_API_BASE=https://你的后端地址.onrender.com
+用户 → Cloudflare Pages（网页）→ Render（API）→ 各视频平台
 ```
 
-完整部署教程见 **[DEPLOY.md](./DEPLOY.md)**。
+### ① 部署后端 — [Render](https://render.com)
+
+| 配置项 | 值 |
+|--------|-----|
+| Root Directory | `backend` |
+| Build Command | `pip install -r requirements.txt` |
+| Start Command | `gunicorn --workers 2 --bind 0.0.0.0:$PORT --timeout 120 app:app` |
+| Plan | Free |
+
+环境变量（可选）：
+
+```text
+SECRET_KEY=随机字符串
+XIAOHONGSHU_COOKIE=Header String 格式的 Cookie
+```
+
+部署完成后记下地址，例如：`https://qushuiyin-api.onrender.com`
+
+### ② 部署前端 — [Cloudflare Pages](https://dash.cloudflare.com)
+
+| 配置项 | 值 |
+|--------|-----|
+| 框架预设 | **无 / None**（不要选 VitePress） |
+| 根目录 | `frontend` |
+| 构建命令 | `npm install && npm run build` |
+| 输出目录 | `dist` |
+
+环境变量（**必填**）：
+
+| 变量名 | 值 |
+|--------|-----|
+| `VITE_API_BASE` | `https://你的render地址.onrender.com`（末尾不要 `/`） |
+
+部署完成后访问 `https://xxx.pages.dev` 即可。
+
+> 更详细的图文步骤见 **[DEPLOY.md](./DEPLOY.md)**
+
+### 备选前端平台
+
+[Vercel](https://vercel.com)：Root Directory 填 `frontend`，同样设置 `VITE_API_BASE`。
 
 ## 📁 项目结构
 
@@ -103,6 +138,16 @@ QuShuiYin/
 | POST | `/api/parse` | 解析分享链接 |
 | GET | `/api/stream` | 媒体预览代理 |
 | GET | `/api/download` | 媒体下载代理 |
+
+## ❓ 常见问题
+
+| 问题 | 解决办法 |
+|------|----------|
+| 网页能开，解析失败 | 检查 `VITE_API_BASE` 是否指向 Render 后端，改后需重新部署前端 |
+| Render 第一次很慢 | 免费实例会休眠，等 30～60 秒冷启动 |
+| 小红书解析失败 | 使用带 `xsec_token` 的完整分享链接，或配置 `XIAOHONGSHU_COOKIE` |
+| B 站无法下载 | 确保后端已更新到最新版（CDN 直链 + 代理下载） |
+| Cloudflare 没有 Vite 预设 | 选「无」，手动填构建命令和 `dist` |
 
 ## ⚠️ 免责声明
 
