@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    container_name: qingying-api
+    restart: always
+    ports:
+      - "8051:8051"
+    volumes:
+      - ./static/videos:/app/static/videos
+      - ./logs:/app/logs
+    environment:
+      - TZ=Asia/Shanghai
+      - XIAOHONGSHU_COOKIE=${XIAOHONGSHU_COOKIE}
+      - DOUBAO_COOKIE=${DOUBAO_COOKIE}
+      - SECRET_KEY=${SECRET_KEY}

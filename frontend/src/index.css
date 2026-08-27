@@ -1,0 +1,78 @@
+:root {
+  --bg: #e8edf2;
+  --bg-deep: #d5dde6;
+  --ink: #0d1117;
+  --ink-soft: #3a4553;
+  --muted: #6b7785;
+  --line: rgba(13, 17, 23, 0.1);
+  --panel: rgba(255, 255, 255, 0.72);
+  --panel-solid: #f7f9fb;
+  --accent: #b8f000;
+  --accent-ink: #102400;
+  --sky: #7dd3fc;
+  --danger: #e11d48;
+  --radius: 22px;
+  --shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(125, 211, 252, 0.45), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 95% 5%, rgba(184, 240, 0, 0.28), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(148, 163, 184, 0.35), transparent 55%),
+    linear-gradient(165deg, #eef2f6 0%, #e4eaf0 45%, #dce4ec 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}

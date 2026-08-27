@@ -1,0 +1,15 @@
+# Render Blueprint：连接 GitHub 后可一键创建后端服务
+# 文档：https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: qingying-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 2 --bind 0.0.0.0:$PORT --timeout 120 app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.11.9"
