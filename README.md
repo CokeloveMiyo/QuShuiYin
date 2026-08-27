@@ -6,6 +6,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+## 📸 界面预览
+
+![清影 QuShuiYin 界面预览](./docs/preview.png)
+
 ---
 
 ## ✨ 功能特性
